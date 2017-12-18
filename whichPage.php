@@ -48,36 +48,19 @@
         echo 'Facebook SDK returned an error: ' . $e->getMessage();
         exit;
       }
-      $testdata = $fb -> get('/me/accounts');
-      $testdata = $testdata->getGraphEdge()->asArray();
-      //print_r($testdata);
+
+      $page_id = "";
+      $sr = $facebook->getSignedRequest();
+      print_r($sr);
+      // if($page = $sr['page']) {
+      //     $page_id = $page['id'];
+      // }
+
       echo 'Logged in as ' . $userNode->getName();
     } else {
-      $loginUrl = $helper->getLoginUrl('https://www.docconsult.in/ni/addTab/', $permissions);
-      
+      $loginUrl = $helper->getLoginUrl('https://www.docconsult.in/ni/whichPage/', $permissions);
       echo '<a href="' . $loginUrl . '">Log in with Facebook!</a>';
     }
-  ?>
-  <form action="" method="POST">
-    <select name="page" single>
-    <?php
-      foreach ($testdata as $key) {
-        ?>
-        <option value="<?php echo $key['id']; ?>"><?php echo $key['name']; ?></option>
-        <?php }?>
-    </select>
-    <input type="hidden" value="<?php echo $key['access_token']; ?>" />
-    <input type="submit" name="submit" />
-  </form>
-  <?php
-  if (isset($_POST['submit'])){
-    $page = $fb->get('/'.$_POST['page'].'?fields=access_token, name, id');
-    $page = $page->getGraphNode()->asArray();
-    //print_r($page);
-    $addTab = $fb->post('/'.$page['id'].'/tabs', array('app_id' => '507994349541183'), $page['access_token']);
-    $addTab = $addTab->getGraphNode()->asArray();
-    print_r($addTab);
-  }
   ?>
 
 </body>

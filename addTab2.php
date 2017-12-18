@@ -8,7 +8,7 @@ $fb = new Facebook\Facebook([
     'default_graph_version' => 'v2.11',
     ]);
 
-$helper = $fb->getRedirectLoginHelper();
+$helper = $fb->getPageTabHelper();
 
 $permissions = ['email', 'manage_pages', 'pages_show_list']; // optional
 	
@@ -57,8 +57,7 @@ if (isset($accessToken)) {
 	try {
 		$profile_request = $fb->get('/me?fields=name,first_name,last_name,email');
         $profile = $profile_request->getGraphNode()->asArray();
-        $helper = $fb->getPageTabHelper();
-        $signedRequest = $helper->getSignedRequest();
+        $signedRequest = $helper->getSignedRequest()->asArray();
 	} catch(Facebook\Exceptions\FacebookResponseException $e) {
 		// When Graph returns an error
 		echo 'Graph returned an error: ' . $e->getMessage();

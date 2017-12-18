@@ -3,12 +3,18 @@
 </head>
 <body>
 <?php
+$mysqli = new mysqli("127.0.0.1", "root", "", "docconsu_db");
+$result = $mysqli->query("SELECT * FROM page_tab");
+print_r($result);
+?>
+<?php
   session_start();
-  require_once __DIR__ . '/src/Facebook/autoload.php';
+  $_SESSION['id']="Testing";
+  require_once __DIR__ . '/vendor/autoload.php';
   $fb = new Facebook\Facebook([
-    'app_id' => '507994349541183',
-    'app_secret' => '086f3329a66b06d5e9c5f842fd7e218e',
-    'default_graph_version' => 'v2.11',
+    'app_id' => '1912556462327602',
+    'app_secret' => 'a98e53d12469111ece622c4ced035685',
+    'default_graph_version' => 'v2.10',
     ]);
     $helper = $fb->getRedirectLoginHelper();
     $permissions = ['email', 'manage_pages', 'pages_show_list'];
@@ -52,7 +58,7 @@
       //print_r($testdata);
       echo 'Logged in as ' . $userNode->getName();
     } else {
-      $loginUrl = $helper->getLoginUrl('https://www.docconsult.in/ni/addTab/', $permissions);
+      $loginUrl = $helper->getLoginUrl('http://localhost:4001/addTabPC.php', $permissions);
       
       echo '<a href="' . $loginUrl . '">Log in with Facebook!</a>';
     }
@@ -76,6 +82,9 @@
     $addTab = $fb->post('/'.$page['id'].'/tabs', array('app_id' => '507994349541183'), $page['access_token']);
     $addTab = $addTab->getGraphNode()->asArray();
     print_r($addTab);
+    $userid=$_SESSION['id'];
+    $pageid=$_POST['page'];
+    $mysqli->query("INSERT INTO page_tab SET doc_id='$userid', page_id='$pageid'");
   }
   ?>
 

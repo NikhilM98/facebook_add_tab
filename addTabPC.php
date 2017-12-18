@@ -10,6 +10,7 @@ print_r($result);
 <?php
   session_start();
   $_SESSION['id']="Testing";
+  $_SESSION['cid']="Testin";
   require_once __DIR__ . '/vendor/autoload.php';
   $fb = new Facebook\Facebook([
     'app_id' => '1912556462327602',
@@ -55,7 +56,10 @@ print_r($result);
       }
       $testdata = $fb -> get('/me/accounts');
       $testdata = $testdata->getGraphEdge()->asArray();
-      //print_r($testdata);
+      print_r($testdata);
+      echo "<hr/>";
+      echo ($testdata[0][perms][0]);
+      echo "<hr/>";
       echo 'Logged in as ' . $userNode->getName();
     } else {
       $loginUrl = $helper->getLoginUrl('http://localhost:4001/addTabPC.php', $permissions);
@@ -91,3 +95,56 @@ print_r($result);
 </body>
 
 </html>
+
+
+
+<?php
+
+$arr = "(
+    [app:protected] => Facebook\FacebookApp Object
+        (
+            [id:protected] => 507994349541183
+            [secret:protected] => 086f3329a66b06d5e9c5f842fd7e218e
+        )
+
+    [rawSignedRequest:protected] => A-tCrQ9ywSu3fgIU1bYyPks0z54Y5jDor35DoK6YKPQ.eyJhbGdvcml0aG0iOiJITUFDLVNIQTI1NiIsImV4cGlyZXMiOjE1MTM1OTg0MDAsImlzc3VlZF9hdCI6MTUxMzU5MjA3Miwib2F1dGhfdG9rZW4iOiJFQUFIT0JLYkFsejhCQUJRNkI2c0xUR3g0QXBSRXBRTkV5c0ZUa1R4UUFHTExVNkt1QW80dDhiN3JtdDhhTVQ0YWdmUFdNczFkMHZ1eDNxWG9aQXhoSjhwMVdBS1VsbE44bHBpUkNqR3p0dkRHb2diZE5NejM1MmdGU1NnMUxFUldURzd0eFNxS0U5N2ZNUWJkcnYxekRzSXVqU080NG5kb1VCeVFaQkZjT0lnMlJoalRSTElWbjdYQVdOa2NzWkQiLCJwYWdlIjp7ImlkIjoiODQ0Nzk1MzYyMzU2MDkxIiwiYWRtaW4iOnRydWV9LCJ1c2VyIjp7ImNvdW50cnkiOiJpbiIsImxvY2FsZSI6ImVuX0dCIiwiYWdlIjp7Im1pbiI6MTgsIm1heCI6MjB9fSwidXNlcl9pZCI6IjE5MjUyMTgxNDQzNjI3MTUifQ
+    [payload:protected] => Array
+        (
+            [algorithm] => HMAC-SHA256
+            [expires] => 1513598400
+            [issued_at] => 1513592072
+            [oauth_token] => EAAHOBKbAlz8BABQ6B6sLTGx4ApREpQNEysFTkTxQAGLLU6KuAo4t8b7rmt8aMT4agfPWMs1d0vux3qXoZAxhJ8p1WAKUllN8lpiRCjGztvDGogbdNMz352gFSSg1LERWTG7txSqKE97fMQbdrv1zDsIujSO44ndoUByQZBFcOIg2RhjTRLIVn7XAWNkcsZD
+            [page] => Array
+                (
+                    [id] => 844795362356091
+                    [admin] => 1
+                )
+
+            [user] => Array
+                (
+                    [country] => in
+                    [locale] => en_GB
+                    [age] => Array
+                        (
+                            [min] => 18
+                            [max] => 20
+                        )
+
+                )
+
+            [user_id] => 1925218144362715
+        )
+
+)";
+print "<pre>";
+print_r($arr);
+print "</pre>";
+
+$arr1 = json_encode($arr);
+$arr2 = json_decode($arr1);
+
+print "<pre>";
+print_r($arr2);
+print "</pre>";
+
+?>

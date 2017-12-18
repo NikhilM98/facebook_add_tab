@@ -4,6 +4,7 @@
 <body>
 <?php
   session_start();
+  $mysqli = new mysqli("localhost", "docconsu_test", "F2Y]os-jc((J", "docconsu_test");
   require_once __DIR__ . '/src/Facebook/autoload.php';
   $fb = new Facebook\Facebook([
     'app_id' => '507994349541183',
@@ -56,8 +57,21 @@
       
       echo '<a href="' . $loginUrl . '">Log in with Facebook!</a>';
     }
+  
+  echo ($_SESSION['login_id']);
+  $clinics = json_decode(($_SESSION['doc_details']['clinic']), true);
+  $clinicid = array();
+  foreach ($clinics as $clinic) {
+    $clinicid[] = $clinic['clinic_id']; 
+  };
+  $clinicid = implode(',', $clinicid);
+  $sql = "SELECT * FROM table WHERE id IN ('$clinicid')";
+  echo $sql;
   ?>
   <form action="" method="POST">
+    <select name="cdid" single>
+      <option value="<?php echo ($_SESSION['login_id']); ?>"><?php echo ($_SESSION['name']); ?></option>
+    </select>
     <select name="page" single>
     <?php
       foreach ($testdata as $key) {
@@ -76,6 +90,10 @@
     $addTab = $fb->post('/'.$page['id'].'/tabs', array('app_id' => '507994349541183'), $page['access_token']);
     $addTab = $addTab->getGraphNode()->asArray();
     print_r($addTab);
+    // $userid=$_SESSION['id'];
+    // $clinicid=$_SESSION['cid'];
+    // $pageid=$_POST['page'];
+    // $mysqli->query("INSERT INTO page_tab SET doc_id='$userid', page_id='$pageid'");
   }
   ?>
 

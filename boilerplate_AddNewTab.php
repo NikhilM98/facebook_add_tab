@@ -54,6 +54,7 @@
             if(isset($accessToken)) { 
                 // If $accessToken is set
             ?>
+
                 <?php 
                     if (isset($_SESSION['facebook_access_token'])){
                         // If facebook_access_token is set
@@ -109,6 +110,7 @@
 
                     }
                 ?>
+
                 <?php
 
                     $clinics = json_decode(($_SESSION['doc_details']['clinic']), true);
@@ -173,7 +175,8 @@
 
                         </form>
 
-                    <?php } else { 
+                <?php 
+                    } else { 
                         // If Facebook Pages do not exists
 
                         ?>
@@ -181,74 +184,75 @@
                             No Facebook Page exists
                         </div>
 
-                    <?php } ?>
+                <?php 
+                    } ?>
 
-                <?php } else {
-                    // If $accessToken is not set
+        <?php 
+            } else {
+                // If $accessToken is not set
 
-                    $loginUrl = $helper->getLoginUrl('https://www.website.in/boilerplate_AddNewTab/', $permissions);
-                        // Create getLoginUrl helper. User should be redirected to this page again
+                $loginUrl = $helper->getLoginUrl('https://www.website.in/boilerplate_AddNewTab/', $permissions);
+                    // Create getLoginUrl helper. User should be redirected to this page again
 
-                    echo '<a href="' . $loginUrl . '">Log in with Facebook!</a>';
-                        // Get OAuth Authentication from user
+                echo '<a href="' . $loginUrl . '">Log in with Facebook!</a>';
+                    // Get OAuth Authentication from user
 
-                } ?>
+            } ?>
 
-            <?php
-                if (isset($_POST['submit'])){
-                    // If POST data has Submit data
+        <?php
+            if (isset($_POST['submit'])){
+                // If POST data has Submit data
 
-                    $page = $fb->get('/'.$_POST['page'].'?fields=access_token, name, id');
-                        // Create a GET request to get the page_access_token, name, id from the user
+                $page = $fb->get('/'.$_POST['page'].'?fields=access_token, name, id');
+                    // Create a GET request to get the page_access_token, name, id from the user
 
-                    $page = $page->getGraphNode()->asArray();
-                        // Convert the data into Array
+                $page = $page->getGraphNode()->asArray();
+                    // Convert the data into Array
 
-                    $addTab = $fb->post('/'.$page['id'].'/tabs', array('app_id' => '507994349541183'), $page['access_token']);
-                        // Create a POST request to create a new tab.
-                        // App_id and Page Access Token are provides in the POST request
-                        // The Response is recorded in $addTab
+                $addTab = $fb->post('/'.$page['id'].'/tabs', array('app_id' => '507994349541183'), $page['access_token']);
+                    // Create a POST request to create a new tab.
+                    // App_id and Page Access Token are provides in the POST request
+                    // The Response is recorded in $addTab
 
-                    $addTab = $addTab->getGraphNode()->asArray();
-                        // $addTab data is converetd into Array
+                $addTab = $addTab->getGraphNode()->asArray();
+                    // $addTab data is converetd into Array
 
-                    $pageid=$_POST['page'];
-                        // Set PageID equal to the one submitted by the user using the above form
+                $pageid=$_POST['page'];
+                    // Set PageID equal to the one submitted by the user using the above form
 
-                    if ($addTab[success] == 1){
-                        // If tab is successfully added
-                        // Now we'll add data into database
+                if ($addTab[success] == 1){
+                    // If tab is successfully added
+                    // Now we'll add data into database
 
-                        if ($_POST['cdid'] == "DoKKy") {
-                            // If value DoKKy is output then that means that Doctor himself is selected
+                    if ($_POST['cdid'] == "DoKKy") {
+                        // If value DoKKy is output then that means that Doctor himself is selected
 
-                            $userid = $_SESSION['login_id'];
-                                // Get Doctor ID from SESSION
+                        $userid = $_SESSION['login_id'];
+                            // Get Doctor ID from SESSION
 
-                            $mysqli->query("INSERT INTO page_tab SET doc_id='$userid', page_id='$pageid'");
-                                // Insert Doctor ID into Table
-
-                        } else {
-                            // If any Clinic is Selected instead of Doctor then
-
-                            $clinicid = $_POST['cdid'];
-                                // Set Clinic ID equal to one obtained from above form
-
-                            $mysqli->query("INSERT INTO page_tab SET clinic_id='$clinicid', page_id='$pageid'");
-                                // Insert Clinic ID into the Table
-
-                        }
-
-                        echo "tab added";
-                            // Tab has been Added
+                        $mysqli->query("INSERT INTO page_tab SET doc_id='$userid', page_id='$pageid'");
+                            // Insert Doctor ID into Table
 
                     } else {
-                        echo "There is some error. Please RELOAD the page and try again";
-                            // Facebook returned some error. Tab was not added
+                        // If any Clinic is Selected instead of Doctor then
+
+                        $clinicid = $_POST['cdid'];
+                            // Set Clinic ID equal to one obtained from above form
+
+                        $mysqli->query("INSERT INTO page_tab SET clinic_id='$clinicid', page_id='$pageid'");
+                            // Insert Clinic ID into the Table
+
                     }
+
+                    echo "tab added";
+                        // Tab has been Added
+
+                } else {
+                    echo "There is some error. Please RELOAD the page and try again";
+                        // Facebook returned some error. Tab was not added
                 }
-            ?>
+            }
+        ?>
 
-</body>
-
+    </body>
 </html>

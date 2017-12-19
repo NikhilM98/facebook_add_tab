@@ -8,11 +8,6 @@
     $mysqli = new mysqli("host", "username", "password", "database_name");
         // Connect to database
 
-    $result = $mysqli->query("SELECT * FROM page_tab");
-        // USELESS STEP
-        // Request for table in which data about page_id and user_id is stored
-        // Tab will generate dynamic content corresponding to the page_id and user_id
-
     $fb = new Facebook\Facebook([
         'app_id' => '{Your App ID}',
         'app_secret' => '{Your App Secret}',
@@ -21,12 +16,12 @@
         // Create a facebook object
         // It is used to connect with your app each time a request is made
 
-    $helper = $fb->getPageTabHelper();
-        // Create a getPageTabHelper
+    $helper = $fb->getRedirectLoginHelper();
+        // Create a getRedirectLoginHelper
         // This helper is used to get access_token from facebook tab
 
     $permissions = ['email', 'manage_pages', 'pages_show_list'];
-        // These are the permissions that getPageTabHelper takes from the user
+        // These are the permissions that getRedirectLoginHelper takes from the user
 	
     try {
         if (isset($_SESSION['facebook_access_token'])) {
@@ -150,8 +145,13 @@
             <?php
         }
     } else {
-        $loginUrl = $helper->getLoginUrl('https://www.docconsult.in/ni/addTab2/', $permissions);
+        // If $accessToken is not set
+
+        $loginUrl = $helper->getLoginUrl('https://www.website.in/boilerplate_AddedTab/', $permissions);
+            // Create getLoginUrl helper. User should be redirected to this page again
+
         echo '<a href="' . $loginUrl . '">Log in with Facebook!</a>';
             // Get OAuth Authentication from user
 
-    } ?>
+    }
+?>

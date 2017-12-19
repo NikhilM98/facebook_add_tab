@@ -81,7 +81,7 @@ if (isset($accessToken)) {
     $sql="SELECT * FROM page_tab where page_id=$signedRequest[page][id]";
     $result = $mysqli->query($sql);
     if ($result['doc_id'] != NULL){
-
+      
     } else if ($result['clinic_id'] != NULL) {
 
     } else {

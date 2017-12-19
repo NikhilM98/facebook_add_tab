@@ -4,8 +4,11 @@
 <body>
 <?php
 $mysqli = new mysqli("127.0.0.1", "root", "", "docconsu_db");
-$result = $mysqli->query("SELECT * FROM page_tab");
-print_r($result);
+$results = $mysqli->query("SELECT * FROM page_tab WHERE page_id='844795362356091' order by id");
+foreach ($results as $result) {
+  print_r($result);
+  echo "<br />";
+}
 ?>
 <?php
   session_start();

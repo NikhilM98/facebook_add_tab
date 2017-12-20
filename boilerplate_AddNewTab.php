@@ -51,6 +51,12 @@
 
             }
 
+            if (isset($_GET['code'])) {
+                header('Location: ./');
+                    // redirect the user back to the same page if it has "code" GET variable
+    
+            }
+
             if(isset($accessToken)) { 
                 // If $accessToken is set
             ?>

@@ -2,8 +2,6 @@
     session_start();
     require_once __DIR__ . '/src/Facebook/autoload.php';
     $mysqli = new mysqli("localhost", "docconsu_test", "F2Y]os-jc((J", "docconsu_test");
-    $result = $mysqli->query("SELECT * FROM page_tab");
-    print_r($result);
     $fb = new Facebook\Facebook([
         'app_id' => '507994349541183',
         'app_secret' => '086f3329a66b06d5e9c5f842fd7e218e',
@@ -54,9 +52,16 @@
         }
         if (!empty($signedRequest)){
     ?>
-    <?php
-        print_r($signedRequest[page][id]);
-        $_GET['id']=1;
+    <?php       
+        $pageid = $signedRequest[page][id];
+        $pages = $mysqli->query("SELECT * FROM page_tab WHERE page_id='$pageid' ORDER BY id DESC LIMIT 1");
+        foreach ($pages as $page) {
+            if (!empty($page['doc_id'])){
+                $_GET['id']=$page['doc_id'];
+            } else if (!empty($page['client_id'])){
+                $_GET['cid']=$page['client_id'];
+            }
+        }
         include("tab.php");
     ?>
     <?php

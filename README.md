@@ -4,7 +4,7 @@
 
 # The Problem with Facebook Add Tab
 
-Users can only add simple secure url in Page Tabs.
+    Users can only add simple secure url in Page Tabs.
 
 > Those URLs cannot have GET data.
 
@@ -20,7 +20,7 @@ Users can only add simple secure url in Page Tabs.
 
 # How does the application works
 
-Objective of the sample project
+    Objective of the sample project
 
 > I was given a task where I have to create a single application to add a Page Tab in the facebook page of doctors or clinics.
 
@@ -35,7 +35,7 @@ Objective of the sample project
 > User has to click on a button to launch the app (view the page) within the Added Tab. Different content is displayed on the pages using the page_id from the page itself and the database.
 
 
-First Part: AddNewTab.php:
+    First Part: AddNewTab.php:
 
 > This page is used to add a new tab in facebook page
 
@@ -58,7 +58,7 @@ First Part: AddNewTab.php:
 > Data about the page_id on which the tab is added and "corresponding other data" (What to display?) is stored in the database.
 
 
-Second Part: AddedTab.php:
+    Second Part: AddedTab.php:
 
 > This page is the page that is displayed in the added tab. You have to set the url of facebook secure tab url in your app dashboard equal to this page url
 

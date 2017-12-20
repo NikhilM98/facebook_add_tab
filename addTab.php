@@ -26,6 +26,9 @@
     echo 'Facebook SDK returned an error: ' . $e->getMessage();
     exit;
   }
+  if (isset($_GET['code'])) {
+    header('Location: ./');
+  }
   if(isset($accessToken)) { ?>
     <?php 
       if (isset($_SESSION['facebook_access_token'])){

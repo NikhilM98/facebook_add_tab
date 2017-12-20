@@ -93,29 +93,71 @@
   <?php } else {
     $loginUrl = $helper->getLoginUrl('https://www.docconsult.in/ni/addTab/', $permissions);
     
-    echo '<a href="' . $loginUrl . '">Log in with Facebook!</a>';
+    echo '<a href="' . $loginUrl . '">Connect with Facebook!</a>';
   } ?>
   <?php
-    if (isset($_POST['submit'])){
-      $page = $fb->get('/'.$_POST['page'].'?fields=access_token, name, id');
-      $page = $page->getGraphNode()->asArray();
-      $addTab = $fb->post('/'.$page['id'].'/tabs', array('app_id' => '507994349541183'), $page['access_token']);
-      $addTab = $addTab->getGraphNode()->asArray();
-      print_r($addTab);
-      $pageid=$_POST['page'];
-      // if ($addTab[success] == 1){
-      //   if ($_POST['cdid'] == "DoKKy") {
-      //     $userid = $_SESSION['login_id'];
-      //     $mysqli->query("INSERT INTO page_tab SET doc_id='$userid', page_id='$pageid'");
-      //   } else {
-      //     $clinicid = $_POST['cdid'];
-      //     $mysqli->query("INSERT INTO page_tab SET clinic_id='$clinicid', page_id='$pageid'");
-      //   }
-      //   echo "tab added";
-      // } else {
-      //   echo "There is some error. Please RELOAD the page and try again";
-      // }
+  if (isset($_POST['submit'])){
+    $pageid=$_POST['page'];    
+    if ($_POST['cdid'] == "DoKKy") {
+      $userid = $_SESSION['login_id'];
+      $allow = $mysqli->query("SELECT allow FROM practice WHERE doctor_id = '$userid' ");
+      $perm = 4;
+      foreach ($allow as $permission) {
+        if ($permission['allow'] < $perm){
+          if ($permission['allow'] == 0){
+            continue;
+          } else {
+            $perm = $permission['allow']; 
+          }
+        }
+      }
+      if ($perm == 1) {
+        $tabname = "Book an Appointment";
+      } else if ($perm == 2) {
+        $tabname = "Request for Call";
+      } else if ($perm == 3) {
+        $tabname = "On Call";
+      } else if ($perm == 4) {
+        $tabname = "View Doctor Profile";
+      }
+      $mysqli->query("INSERT INTO page_tab SET doc_id='$userid', page_id='$pageid'");
+      sendGetReq($fb, $tabname);
+    } else {
+      $clinicid = $_POST['cdid'];
+      $allow = $mysqli->query("SELECT allow FROM clinic WHERE id = '$clinicid' ");
+      $perm = 3;
+      foreach ($allow as $permission) {
+        if ($permission['allow'] < $perm){
+          if ($permission['allow'] == 0){
+            continue;
+          } else {
+            $perm = $permission['allow']; 
+          }
+        }
+      }
+      if ($perm == 1) {
+        $tabname = "Book an Appointment";
+      } else if ($perm == 2) {
+        $tabname = "Request for Call";
+      } else if ($perm == 3) {
+        $tabname = "View Doctor Profile";
+      }
+      $mysqli->query("INSERT INTO page_tab SET clinic_id='$clinicid', page_id='$pageid'");
+      sendGetReq($fb, $tabname);
     }
+    
+  }
+  function sendGetReq($fb, $tabname) {
+    $page = $fb->get('/'.$_POST['page'].'?fields=access_token, name, id');
+    $page = $page->getGraphNode()->asArray();
+    $addTab = $fb->post('/'.$page['id'].'/tabs', array('app_id' => '507994349541183', 'custom_name' => $tabname), $page['access_token']);
+    $addTab = $addTab->getGraphNode()->asArray();
+    if ($addTab[success] == 1){
+      echo "tab added";
+    } else {
+      echo "There is some error. Please RELOAD the page and try again";
+    }
+  }
   ?>
 
 </body>

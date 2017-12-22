@@ -53,11 +53,9 @@
       }
       $testdata = $fb -> get('/me/accounts');
       $testdata = $testdata->getGraphEdge()->asArray();
-      //print_r($testdata);
       echo 'Logged in as ' . $userNode->getName();
     ?>
     <?php
-      echo ($_SESSION['login_id']);
       $clinics = json_decode(($_SESSION['doc_details']['clinic']), true);
       $clinicid = array();
       foreach ($clinics as $clinic) {
@@ -91,7 +89,7 @@
       </div>
     <?php } ?>
   <?php } else {
-    $loginUrl = $helper->getLoginUrl('https://www.docconsult.in/ni/addTab/', $permissions);
+    $loginUrl = $helper->getLoginUrl('https://www.docconsult.in/doc_panel/facebook/', $permissions);
     
     echo '<a href="' . $loginUrl . '">Connect with Facebook!</a>';
   } ?>

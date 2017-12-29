@@ -49,8 +49,6 @@
             exit;
         }
         if (!empty($signedRequest)){
-    ?>
-    <?php       
             $pageid = $signedRequest[page][id];
             $pages = $functions->db->query("SELECT * FROM page_tab WHERE page_id='$pageid' ORDER BY id DESC LIMIT 1");
             foreach ($pages as $page) {

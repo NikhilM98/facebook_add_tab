@@ -32,7 +32,7 @@
 
 > The second part of the work involded actually displaying different add_tab pages on different facebook pages.
 
-> User has to click on a button to launch the app (view the page) within the Added Tab. Different content is displayed on the pages using the page_id from the page itself and the database.
+> Different content is displayed on the pages using the page_id from the page itself and the database.
 
 
     First Part: AddNewTab.php:
@@ -64,7 +64,7 @@
 
 > This app works in a similar fashion. Database is connected, Facebook object is created.
 
-> User has to click on a button. Once the user clicks on that button, access token is obtained. That access token is used to Get Signed Request from facebook using getPageTabHelper.
+> PageTabHelper is used to obtain access token. That access token is used to Get Signed Request from facebook.
 
 > The Signed Request contains the data about the page_id of the current page. That page_id sent to the database and "corresponding other data" (What to display?) is obtained. // (In our case that data contains Clinic/Doctor ID.)
 
